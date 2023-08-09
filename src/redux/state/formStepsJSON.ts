@@ -16,7 +16,7 @@ export const formStepsJSON: FormStep[] = [
         "type": "STRING",
         "max_length": 255,
         "min_length": 3,
-        "regex": "^[a-zA-Z\s]+$"
+        "regex": "^[a-zA-Zа-яА-Я\s]+$"
     },
     {
         "name": "surname",
@@ -24,7 +24,7 @@ export const formStepsJSON: FormStep[] = [
         "type": "STRING",
         "max_length": 255,
         "min_length": 3,
-        "regex": "^[a-zA-Z\s]+$"
+        "regex": "^[a-zA-Zа-яА-Я\s]+$"
     },
     {
         "name": "age",
