@@ -4,7 +4,7 @@ interface FormState {
     step: number;
     name: string;
     surname: string;
-    age: number | null;
+    age: number | string;
     email: string;
 }
 
@@ -12,12 +12,12 @@ const initialState: FormState = {
     step: 1,
     name: '',
     surname: '',
-    age: null,
+    age: '',
     email: ''
 };
 
-
-const formSlice = createSlice({name: 'form', initialState,
+const formSlice = createSlice({
+    name: 'form', initialState,
     reducers: {
         setStep: (state, action: PayloadAction<number>) => {
             state.step = action.payload;
@@ -33,14 +33,21 @@ const formSlice = createSlice({name: 'form', initialState,
         },
         setEmail: (state, action: PayloadAction<string>) => {
             state.email = action.payload;
-        },
-        resetForm: (state) => {
-            Object.assign(state, initialState);
         }
     }
 });
 
-export const { setStep, setName, setSurname, setAge, setEmail, resetForm } = formSlice.actions;
+export const {setStep, setName, setSurname, setAge, setEmail} = formSlice.actions;
 
 export default formSlice.reducer;
 
+type ActionMapType = {
+    [key: string]: (value: string) => ReturnType<typeof setName | typeof setSurname | typeof setAge | typeof setEmail>;
+};
+
+export const actionsMap: ActionMapType = {
+    'name': setName,
+    'surname': setSurname,
+    'age': value => setAge(Number(value)),
+    'email': setEmail
+};

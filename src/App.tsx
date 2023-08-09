@@ -1,77 +1,70 @@
-import React, {ChangeEvent, useCallback, useState} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import {FormContainer} from './components/Form/FormContainer';
 import styles from './App.module.scss'
 import {useAppSelector} from "./redux/hooks/useAppSelector";
 import {useDispatch} from "react-redux";
-import {setAge, setEmail, setName, setStep, setSurname} from "./redux/reducers/formReducer";
+import {actionsMap, setStep} from "./redux/reducers/formReducer";
+import {formStepsJSON} from "./redux/state/formStepsJSON";
+import {useSteps} from "./components/hooks/useSteps";
 
-enum FormSteps {
-    firstStep = 1,
-    secondStep = 2,
-    thirdStep = 3,
-    forthStep = 4
-}
+type FormValueKeys = 'name' | 'surname' | 'age' | 'email';
 
 function App() {
-
-    const [inputValue, setInputValue] = useState<string>('')
-    const [inputAgeValue, setInputAgeValue] = useState<number | null>(null)
-    const step = useAppSelector((state) => state.form.step)
     const name = useAppSelector((state) => state.form.name)
     const surname = useAppSelector((state) => state.form.surname)
     const age = useAppSelector((state) => state.form.age)
     const email = useAppSelector((state) => state.form.email)
 
+    const {step, handleBack, isBackButtonActive} = useSteps()
+
     const dispatch = useDispatch()
 
-    const onSubmitForm = (e: ChangeEvent<HTMLInputElement>) => {
-        if (typeof Number(e.currentTarget.value) === typeof Number) {
-            setInputAgeValue(+(e.currentTarget.value))
+    const currentStepObject = formStepsJSON[step - 1]; // Defining an object for the current step, adjusting for zero-based array indexing
+
+    const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (currentStepObject.name) {
+            const action = actionsMap[currentStepObject.name as string]
+            const value = e.currentTarget.value;
+
+            if (currentStepObject.name in actionsMap) {
+                dispatch(action(value));
+            } else {
+                console.log('Ошибка - действия не существует')
+            }
         } else {
-            setInputValue(e.currentTarget.value)
+            console.log('Ошибка - поле name не найдено')
         }
-    }
+    };
 
     const handleContinue = useCallback(() => {
-        if (step === FormSteps.firstStep) {
-            dispatch(setName(inputValue))
-            setInputValue('')
+        if (formStepsJSON.length !== step) {
+            dispatch(setStep(step + 1));
+        } else {
+            console.log('form result', {name: name, surname: surname, age: age, email: email});
         }
-        if (step === FormSteps.secondStep) {
-            dispatch(setSurname(inputValue))
-            setInputValue('')
-        }
-        if (step === FormSteps.thirdStep && inputAgeValue !== null) {
-            dispatch(setAge(inputAgeValue))
-            setInputAgeValue(null)
-        }
-        if (step === FormSteps.forthStep) {
-            dispatch(setEmail(inputValue))
-            setInputValue('')
-        }
-    }, [step])
+    }, [step, dispatch, name, surname, age, email]);
 
-    const handleBack = useCallback(() => {
-        if (step > FormSteps.firstStep) {
-            dispatch(setStep(step - 1))
-        }
-    }, [step])
+    const valuesMap: Record<FormValueKeys, string | number> = {
+        'name': name,
+        'surname': surname,
+        'age': age,
+        'email': email
+    };
 
-
-    console.log(step)
-    console.log(name)
-    console.log(surname)
-    console.log(age)
-    console.log(email)
+    const key = currentStepObject.name as FormValueKeys;
+    const inputValue = valuesMap[key];
 
     return (
         <div className={styles.App}>
             <FormContainer
                 handleBack={handleBack}
                 handleContinue={handleContinue}
-                onSubmit={onSubmitForm}
-                value={inputValue || inputAgeValue}
-                backButtonActivator={true}
+                onSubmit={handleValueChange}
+                value={inputValue}
+                backButtonActivator={isBackButtonActive}
+                label={currentStepObject.label}
+                type={currentStepObject.type}
+                name={currentStepObject.name}
             />
         </div>
     );

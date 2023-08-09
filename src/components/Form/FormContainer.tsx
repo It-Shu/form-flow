@@ -3,24 +3,39 @@ import styles from './Form.module.scss';
 
 interface FormContainerProps {
     onSubmit: (e: ChangeEvent<HTMLInputElement>) => void
-    value: string | number | null
+    value: string | number
     backButtonActivator?: boolean
     handleContinue: () => void
     handleBack: () => void
-
+    label: string
+    type: string
+    name: string
 }
 
 export const FormContainer: FC<FormContainerProps> = React.memo((props) => {
 
-    const {onSubmit, value, backButtonActivator, handleContinue} = props
+    const {onSubmit, value, backButtonActivator, handleContinue, handleBack, label, type, name} = props
 
     return (
-        <div className={styles.formContainer}>
-            {value !== null && <input onChange={onSubmit} type='text' value={value} className={styles.formInput}/>}
+        <form className={styles.formContainer}>
+            <label htmlFor={name}>
+                <input
+                    className={styles.formInput}
+                    id={name}
+                    placeholder={label}
+                    onChange={onSubmit}
+                    type={type}
+                    value={value}
+                    name={name}
+                />
+            </label>
+            <div className={styles.buttonContainer}>
+                {backButtonActivator &&
+                <button onClick={handleBack} className={styles.backButton} type="button">Назад</button>}
 
-            {backButtonActivator && <button className={styles.backButton}>Back</button>}
+                <button className={styles.continueButton} onClick={handleContinue} type="button">Продолжить</button>
+            </div>
 
-            <button className={styles.continueButton} onClick={handleContinue}>Continue</button>
-        </div>
+        </form>
     );
 });
