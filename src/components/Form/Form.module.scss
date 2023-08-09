@@ -1,5 +1,5 @@
-@import 'src/styles/variables';
-@import 'src/styles/buttons';
+@import "src/styles/variables";
+@import "src/styles/buttons";
 
 .formContainer {
   display: flex;
@@ -35,6 +35,10 @@
     @media (max-width: 1200px) {
       width: 100%;
     }
+  }
+  .error {
+    text-align: center;
+    color: $highlight-color;
   }
 
   .buttonContainer {

@@ -10,14 +10,14 @@ interface FormState {
 
 const initialState: FormState = {
     step: 1,
-    name: '',
-    surname: '',
-    age: '',
-    email: ''
+    name: "",
+    surname: "",
+    age: "",
+    email: ""
 };
 
 const formSlice = createSlice({
-    name: 'form', initialState,
+    name: "form", initialState,
     reducers: {
         setStep: (state, action: PayloadAction<number>) => {
             state.step = action.payload;
@@ -46,8 +46,8 @@ type ActionMapType = {
 };
 
 export const actionsMap: ActionMapType = {
-    'name': setName,
-    'surname': setSurname,
-    'age': value => setAge(Number(value)),
-    'email': setEmail
+    "name": setName,
+    "surname": setSurname,
+    "age": value => setAge(Number(value)),
+    "email": setEmail
 };
