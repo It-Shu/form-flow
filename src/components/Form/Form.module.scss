@@ -4,47 +4,72 @@
 .formContainer {
   display: flex;
   flex-direction: row;
-  align-self: center;
+  justify-content: center;
   width: 50%;
-  margin-bottom: 5%;
 
   @media (max-width: 1200px) {
     flex-direction: column;
   }
 
+  label {
+    display: flex;
+
+  }
+  .labelName {
+    display: flex;
+    text-align: center;
+    align-self: center;
+    margin-right: 1rem;
+  }
   .formInput {
-    flex-grow: 1;
     padding: 1rem;
     border-radius: 5px;
     border: $border;
     outline: none;
+    width: 400px;
 
     &:focus {
       border-color: #999;
     }
-  }
-
-  .continueButton {
-    margin-left: 1rem;
-    @extend .button;
-    @extend .button--primary;
 
     @media (max-width: 1200px) {
-      margin-left: 0;
-      margin-top: 1rem;
+      width: 100%;
     }
   }
 
-  .backButton {
-    margin-left: 1rem;
-    @extend .button;
-    @extend .button--danger;
+  .buttonContainer {
+    display: flex;
+    flex-direction: row;
+
 
     @media (max-width: 1200px) {
-      margin-left: 0;
-      margin-top: 1rem;
+      flex-direction: column;
+    }
+
+    .continueButton {
+      margin-left: 1rem;
+      @extend .button;
+      @extend .button--primary;
+
+      @media (max-width: 1200px) {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+    }
+
+    .backButton {
+      margin-left: 1rem;
+      @extend .button;
+      @extend .button--danger;
+
+      @media (max-width: 1200px) {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
     }
   }
+
+
 
 
 }
