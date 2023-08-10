@@ -2,13 +2,13 @@ import React, {ChangeEvent, FC} from "react";
 import styles from "./Form.module.scss";
 import {FormStep} from "../../redux/state/formStepsJSON";
 import {FieldErrors, FieldValues, UseFormRegister} from "react-hook-form";
-import {useRenderErrorMessages} from "../hooks/useRenderErrorMessages";
+import {useErrorMessages} from "../hooks/useErrorMessages";
 
 interface FormContainerProps {
     register: UseFormRegister<FieldValues>
     errors: FieldErrors
     currentStepObject: FormStep
-    onSubmit: (e: ChangeEvent<HTMLInputElement>) => void
+    handleValueChange: (e: ChangeEvent<HTMLInputElement>) => void
     value: string | number
     isBackButtonActive?: boolean
     handleContinue: () => void
@@ -24,7 +24,7 @@ export const FormContainer: FC<FormContainerProps> = React.memo((props) => {
         errors,
         currentStepObject,
         register,
-        onSubmit,
+        handleValueChange,
         value,
         isBackButtonActive,
         handleContinue,
@@ -39,9 +39,8 @@ export const FormContainer: FC<FormContainerProps> = React.memo((props) => {
         handleContinue();
     };
 
-    const {message} = useRenderErrorMessages(name, errors, currentStepObject)
+    const {message} = useErrorMessages(name, errors, currentStepObject)
 
-    console.log("render Form")
     return (
         <form className={styles.formContainer} onSubmit={handleSubmitForm} key={currentStepObject.name}>
             <label htmlFor={name}>
@@ -58,7 +57,7 @@ export const FormContainer: FC<FormContainerProps> = React.memo((props) => {
                     className={styles.formInput}
                     id={name}
                     placeholder={label}
-                    onChange={onSubmit}
+                    onChange={handleValueChange}
                     type={type}
                     value={value}
                     name={name}
