@@ -4,7 +4,7 @@ interface FormState {
     step: number;
     name: string;
     surname: string;
-    age: number | string;
+    age: number;
     email: string;
 }
 
@@ -12,7 +12,7 @@ const initialState: FormState = {
     step: 1,
     name: "",
     surname: "",
-    age: "",
+    age: 0,
     email: ""
 };
 
@@ -48,6 +48,6 @@ type ActionMapType = {
 export const actionsMap: ActionMapType = {
     "name": setName,
     "surname": setSurname,
-    "age": value => setAge(Number(value)),
+    "age": (value: string) => setAge(Number(value)),
     "email": setEmail
 };
